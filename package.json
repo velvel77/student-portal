@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "cross-env": "^10.1.0",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "next": "16.1.7",
+    "pg": "^8.20.0",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
