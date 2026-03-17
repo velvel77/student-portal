@@ -176,17 +176,17 @@ export const students: Student[] = [
 
 export default function Home() {
   return (
-    <main className="grid p-2 gap-4 grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
+    <main className="grid p-2 gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
       {/* STUDENTS */}
       {students.map((e) => (
         <div
           key={e.id}
-          className="bg-linear-to-t from-[#0b4763] to-[#0c443d] border border-white flex flex-col rounded-2xl"
+          className="bg-linear-to-t from-[#0b4763] to-[#0e2b27] border border-white flex flex-col rounded-2xl"
         >
-          <section className="flex gap-3 items-center">
+          <section className="flex gap-3 items-center px-2">
             {/* IMAGE */}
             <Image
-              className="rounded-full border border-white h-22 w-22 m-2"
+              className="rounded-full shrink-0 object-cover border border-white h-22 w-22 m-2"
               src={e.picture}
               alt={e.name}
               width={100}
@@ -194,25 +194,27 @@ export default function Home() {
             />
             <div>
               {/* NAME */}
-              <div className="font-bold text-2xl">{e.name}</div>
+              <div className="font-bold text-xl">{e.name}</div>
               {/* LINK */}
-              <Link className="text-blue-400" target="_blank" href={e.portfolio_link}>
+              <Link className="text-blue-400 text-sm" target="_blank" href={e.portfolio_link}>
                 {e.portfolio_link}
               </Link>
             </div>
           </section>
           {/* BIO */}
           <section className="p-2 pt-0 rounded-b-2xl">
-            <p className=" my-2 mx-1">{e.bio}</p>
+            <p className=" my-2 mx-1 ">{e.bio}</p>
             {/* TECHSTACK */}
-            {e.tech_stack.map((tech) => (
-              <span
-                key={tech}
-                className="bg-linear-to-t from-[#1fb8ff] to-[#27d6bf]  text-black border border-black px-2 py-1 mr-1 rounded-full"
-              >
-                {tech}
-              </span>
-            ))}
+            <div className="flex flex-wrap gap-1">
+              {e.tech_stack.map((tech) => (
+                <span
+                  key={tech}
+                  className="bg-linear-to-t text-nowrap from-[#1fb8ff] to-[#27d6bf]  text-black border border-black px-2 rounded-full"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
           </section>
         </div>
       ))}
