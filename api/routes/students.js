@@ -33,4 +33,8 @@ router.post("/", async (req, res) => {
 	}
 });
 
+router.delete("/:id", async (req, res) =>{
+    res.status(200).send("Delete route is reached");
+});
+
 export default router;
