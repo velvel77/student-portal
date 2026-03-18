@@ -43,6 +43,10 @@ try{
     const result = await pool.query(
         `DELETE FROM student WHERE id = $1 RETURNING *`, [id]
     );
+
+    if(result.rowCount === 0){
+        return res.status(400).json({error: "Student was not found"})
+    }
     res.status(200).json(result.rows[0]);
 } catch (err){
     console.error(err)
