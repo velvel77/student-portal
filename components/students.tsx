@@ -134,12 +134,20 @@ export default function Students({ students, techStack }: headerProps) {
       </main>
       {/* MODAL */}
       {showModal && selectedStudent && (
-        <div className="w-80 h-40 rounded-2xl fixed border border-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 flex flex-col justify-center items-center bg-gray-900 bg-opacity-50 z-50">
-          <h1>Delete {selectedStudent.name}?</h1>
-          <button className="hover:cursor-pointer" onClick={deleteStudent}>
+        <div className="w-80 h-45 rounded-2xl fixed border border-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 flex flex-col gap-2 justify-center items-center bg-gray-900 bg-opacity-50 z-50">
+          <h1 className="max-w-[25ch] text-center">
+            Are you sure you want to delete <span className="text-blue-500">{selectedStudent.name}</span>?
+          </h1>
+          <button
+            className="hover:cursor-pointer hover:bg-red-500 bg-red-800 border border-white rounded-md px-2 py-1"
+            onClick={deleteStudent}
+          >
             Confirm Delete
           </button>
-          <button className="hover:cursor-pointer" onClick={() => setShowModal(false)}>
+          <button
+            className="hover:cursor-pointer bg-gray-800 hover:bg-gray-500 border border-white rounded-md px-2 py-1"
+            onClick={() => setShowModal(false)}
+          >
             Cancel
           </button>
         </div>
