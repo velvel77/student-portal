@@ -13,11 +13,32 @@ interface headerProps {
 
 export default function Students({ students, techStack }: headerProps) {
   const [selectTech, setSelectedTech] = useState('');
-  const filtered = selectTech ? students.filter((student) => student.tech_stack?.includes(selectTech)) : students;
+  const [showModal, setShowModal] = useState(false);
+  const [studentList, setStudentList] = useState(students);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const filtered = selectTech ? studentList.filter((student) => student.tech_stack?.includes(selectTech)) : studentList;
   // bg-linear-to-t from-[#026694] to-[#276961]
+
+  async function deleteStudent() {
+    if (!selectedStudent) return;
+
+    try {
+      console.log(`http://localhost:5000/students/${selectedStudent.id}`);
+      const res = await fetch(`http://localhost:5000/students/${selectedStudent.id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        throw new Error('Failed to delete');
+      }
+      setStudentList((prev) => prev.filter((s) => s.id !== selectedStudent.id));
+      setShowModal(false);
+      alert(`${selectedStudent.name} deleted`);
+      setSelectedStudent(null);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
-    <>
-      <header className="bg-[#16161d] p-4 mb-4">
+    <div className="relative">
+      <header className="bg-[#16161d] p-8 m-4 rounded-2xl shadow-[0_0_15px_#33beff]">
         <h1 className="text-3xl font-bold mb-2">
           Search{' '}
           <span className="text-transparent bg-clip-text bg-linear-to-r from-[#33beff] to-[#19ffe4]">Talent</span>
@@ -28,7 +49,7 @@ export default function Students({ students, techStack }: headerProps) {
         <div className="flex flex-col my-2">
           <div className="flex text-xl items-center">
             <Users className="size-4 text-[#33beff]" />
-            <span>{students.length}</span>
+            <span className="pl-1">{filtered.length}</span>
             <small className="text-xs px-2">Active Experts</small>
           </div>
           <div className="flex pt-4 max-w-90">
@@ -51,13 +72,21 @@ export default function Students({ students, techStack }: headerProps) {
           </div>
         </div>
       </header>
+      <div className="text-white px-1 mt-8 m-4 flex justify-between">
+        <div className="font-bold">Featured Experts</div>
+        <small className="text-[#adadad] self-end">{`${filtered.length} Results`}</small>
+      </div>
 
       <main className="grid px-4 gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
         {/* STUDENTS */}
         {filtered.map((student) => (
           <div
+            onClick={() => {
+              setSelectedStudent(student);
+              setShowModal(true);
+            }}
             key={student.id}
-            className="bg-[#16161d] hover:shadow-blue-300 hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] inset-shadow-fuchsia-800 transition-all duration-300 border border-white flex flex-col rounded-2xl"
+            className="bg-[#16161d] hover:shadow-blue-300 hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] transition-all duration-100 ease-in-out border border-white flex flex-col rounded-2xl"
           >
             <section className="flex gap-3 items-center px-2">
               {/* IMAGE */}
@@ -103,6 +132,18 @@ export default function Students({ students, techStack }: headerProps) {
           </div>
         ))}
       </main>
-    </>
+      {/* MODAL */}
+      {showModal && selectedStudent && (
+        <div className="w-80 h-40 rounded-2xl fixed border border-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inset-0 flex flex-col justify-center items-center bg-gray-900 bg-opacity-50 z-50">
+          <h1>Delete {selectedStudent.name}?</h1>
+          <button className="hover:cursor-pointer" onClick={deleteStudent}>
+            Confirm Delete
+          </button>
+          <button className="hover:cursor-pointer" onClick={() => setShowModal(false)}>
+            Cancel
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
