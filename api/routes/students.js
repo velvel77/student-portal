@@ -33,4 +33,26 @@ router.post("/", async (req, res) => {
 	}
 });
 
+router.delete("/:id", async (req, res) =>{
+const id = parseInt(req.params.id);
+
+if (isNaN(id)){
+     return res.status(400).json({error: "Ivalid ID (Not a number"});
+}
+try{
+    const result = await pool.query(
+        `DELETE FROM student WHERE id = $1 RETURNING *`, [id]
+    );
+
+    if(result.rowCount === 0){
+        return res.status(400).json({error: "Student was not found"})
+    }
+    res.status(200).json(result.rows[0]);
+} catch (err){
+    console.error(err)
+
+    res.status(500).send("Delete failed...")
+}
+});
+
 export default router;
